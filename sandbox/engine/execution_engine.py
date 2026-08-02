@@ -17,6 +17,7 @@ from pathlib import Path
 from sandbox.behavior.behavior_recorder import BehaviorRecorder
 from sandbox.sensors.filesystem_sensor import FilesystemSensor
 from sandbox.sensors.process_sensor import ProcessSensor
+from sandbox.core.event_types import EventType
 
 
 class ExecutionEngine:
@@ -45,7 +46,7 @@ class ExecutionEngine:
 
             recorder.record(
                 sensor="engine",
-                event_type="EXECUTION_START",
+                event_type=EventType.EXECUTION_START,
                 payload={
                     "asset": asset.name,
                 },
@@ -73,7 +74,7 @@ class ExecutionEngine:
 
             recorder.record(
                 sensor="engine",
-                event_type="EXECUTION_END",
+                event_type=EventType.EXECUTION_END,
                 payload={},
             )
 

@@ -12,6 +12,7 @@ import hashlib
 from pathlib import Path
 
 from sandbox.behavior.behavior_recorder import BehaviorRecorder
+from sandbox.core.event_types import EventType
 
 
 class FilesystemSensor:
@@ -59,7 +60,7 @@ class FilesystemSensor:
 
             recorder.record(
                 sensor=self.name,
-                event_type="FILE_CREATE",
+                event_type=EventType.FILE_CREATE,
                 payload={
                     "path": file,
                     "sha256": after[file],
@@ -70,7 +71,7 @@ class FilesystemSensor:
 
             recorder.record(
                 sensor=self.name,
-                event_type="FILE_DELETE",
+                event_type=EventType.FILE_DELETE,
                 payload={
                     "path": file,
                 },
@@ -82,7 +83,7 @@ class FilesystemSensor:
 
                 recorder.record(
                     sensor=self.name,
-                    event_type="FILE_MODIFY",
+                    event_type=EventType.FILE_MODIFY,
                     payload={
                         "path": file,
                         "old_hash": before[file],
