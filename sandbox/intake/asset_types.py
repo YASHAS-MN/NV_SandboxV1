@@ -6,10 +6,16 @@ Canonical Asset Categories
 
 from __future__ import annotations
 
-from enum import Enum
+try:
+    from enum import StrEnum
+except ImportError:
+    from enum import Enum
+    class StrEnum(str, Enum):
+        def __str__(self) -> str:
+            return str(self.value)
 
 
-class AssetCategory(str, Enum):
+class AssetCategory(StrEnum):
 
     EXECUTABLE = "EXECUTABLE"
 
