@@ -16,7 +16,7 @@ from __future__ import annotations
 import time
 from typing import Any
 
-from sandbox.core.events import Event
+from sandbox.core.events import Event, RuntimeEventMetadata
 from sandbox.transcripts.transcript import BehaviorTranscript
 
 
@@ -29,7 +29,7 @@ class BehaviorRecorder:
     """
 
     def __init__(self) -> None:
-        self._events: list[Event] = []
+        self._events: list[tuple[Event, RuntimeEventMetadata]] = []
         self._sequence = 0
         self._start_time = time.perf_counter()
 
@@ -49,11 +49,19 @@ class BehaviorRecorder:
             sequence=self._sequence,
             sensor=sensor,
             event_type=event_type,
-            relative_time_ms=elapsed,
             payload=payload,
         )
 
-        self._events.append(event)
+        metadata = RuntimeEventMetadata(
+            relative_time_ms=elapsed,
+        )
+
+        self._events.append(
+            (
+                event,
+                metadata,
+            )
+        )
 
         return event
 
@@ -63,8 +71,6 @@ class BehaviorRecorder:
         """
 
         return BehaviorTranscript(events=self._events.copy())
-
-        return [event.to_dict() for event in self._events]
 
     def reset(self) -> None:
         self._events.clear()

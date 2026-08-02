@@ -32,7 +32,7 @@ class TranscriptSerializer:
         """
 
         ordered = sorted(
-            transcript.to_dict(),
+            transcript.canonical_dict(),
             key=lambda event: event["sequence"],
         )
 

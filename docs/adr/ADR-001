@@ -1,0 +1,19 @@
+Title
+
+BehaviorTranscript becomes the canonical protocol artifact.
+
+Reason
+
+The recorder should not export dictionaries.
+
+It should export a protocol object.
+
+The serializer becomes responsible for converting that object into canonical JSON.
+
+Consequences
+
+Cleaner architecture
+Easier testing
+Easier hashing
+Easier consensus
+Future protocol versioning becomes trivial

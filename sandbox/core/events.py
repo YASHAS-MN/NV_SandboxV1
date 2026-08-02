@@ -18,37 +18,36 @@ from typing import Any
 @dataclass(frozen=True, slots=True)
 class Event:
     """
-    Immutable representation of a single observed behavior.
+    Canonical protocol event.
 
-    Notes
-    -----
-    - sequence defines canonical ordering.
-    - relative_time_ms is informational only.
-    - payload must contain only deterministic values.
+    Consensus-critical information only.
     """
 
     sequence: int
-
     sensor: str
-
     event_type: str
-
-    relative_time_ms: int
-
     payload: dict[str, Any]
 
-    def to_dict(self) -> dict[str, Any]:
-        """
-        Convert event into canonical dictionary.
-
-        Keys are intentionally emitted
-        in deterministic order.
-        """
-
+    def canonical_dict(self) -> dict[str, Any]:
         return {
             "sequence": self.sequence,
             "sensor": self.sensor,
             "event_type": self.event_type,
-            "relative_time_ms": self.relative_time_ms,
             "payload": self.payload,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class RuntimeEventMetadata:
+    """
+    Runtime-only metadata.
+
+    Never participates in consensus hashing.
+    """
+
+    relative_time_ms: int
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "relative_time_ms": self.relative_time_ms,
         }
