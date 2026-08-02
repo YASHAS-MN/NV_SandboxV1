@@ -17,6 +17,7 @@ import time
 from typing import Any
 
 from sandbox.core.events import Event
+from sandbox.transcripts.transcript import BehaviorTranscript
 
 
 class BehaviorRecorder:
@@ -56,10 +57,12 @@ class BehaviorRecorder:
 
         return event
 
-    def export(self) -> list[dict[str, Any]]:
+    def export(self) -> BehaviorTranscript:
         """
-        Export canonical transcript.
+        Export immutable transcript.
         """
+
+        return BehaviorTranscript(events=self._events.copy())
 
         return [event.to_dict() for event in self._events]
 

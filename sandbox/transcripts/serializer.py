@@ -12,11 +12,15 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from sandbox.transcripts.transcript import BehaviorTranscript
+
 
 class TranscriptSerializer:
 
     @staticmethod
-    def serialize(events: list[dict[str, Any]]) -> str:
+    def serialize(
+        transcript: BehaviorTranscript,
+    ) -> str:
         """
         Produce canonical JSON.
 
@@ -28,7 +32,7 @@ class TranscriptSerializer:
         """
 
         ordered = sorted(
-            events,
+            transcript.to_dict(),
             key=lambda event: event["sequence"],
         )
 
