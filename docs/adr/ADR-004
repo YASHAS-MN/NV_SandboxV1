@@ -1,0 +1,26 @@
+Title: Layered Security Pipeline
+
+Decision:
+
+Nebula shall analyze assets using progressively more expensive stages.
+
+Stage 1
+Intake
+
+↓
+
+Stage 2
+Static Analysis
+
+↓
+
+Stage 3
+Dynamic Sandbox
+
+↓
+
+Stage 4
+Consensus
+
+Each stage must produce protocol artifacts.
+No stage may bypass an earlier stage.
