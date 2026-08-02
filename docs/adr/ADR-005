@@ -1,0 +1,13 @@
+Decision Engines never perform observations. They only consume canonical protocol artifacts.
+
+This is now true for:
+
+Classification Engine
+Static Analysis Engine
+
+It will also be true later for:
+
+Dynamic Analysis Engine
+Consensus Engine
+
+This keeps the architecture clean, testable, and deterministic.
