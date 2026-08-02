@@ -16,6 +16,7 @@ from pathlib import Path
 
 from sandbox.behavior.behavior_recorder import BehaviorRecorder
 from sandbox.sensors.filesystem_sensor import FilesystemSensor
+from sandbox.sensors.process_sensor import ProcessSensor
 
 
 class ExecutionEngine:
@@ -23,6 +24,7 @@ class ExecutionEngine:
     def __init__(self):
 
         self.filesystem = FilesystemSensor()
+        self.process = ProcessSensor()
 
     def execute(
         self,
@@ -56,14 +58,9 @@ class ExecutionEngine:
                 text=True,
             )
 
-            recorder.record(
-                sensor="engine",
-                event_type="PROCESS_EXIT",
-                payload={
-                    "exit_code": completed.returncode,
-                    "stdout": len(completed.stdout),
-                    "stderr": len(completed.stderr),
-                },
+            self.process.collect(
+                completed,
+                recorder,
             )
 
             after = self.filesystem.snapshot(workspace)
