@@ -13,14 +13,16 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from sandbox.intake.evidence import ExtensionEvidence
+
 
 class ExtensionAnalyzer:
 
     def analyze(
         self,
         asset: Path,
-    ) -> dict:
+    ) -> ExtensionEvidence:
 
-        return {
-            "extension": asset.suffix.lower(),
-        }
+        return ExtensionEvidence(
+            extension=asset.suffix.lower()
+        )

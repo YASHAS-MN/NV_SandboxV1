@@ -7,11 +7,11 @@ analyzer = ExtensionAnalyzer()
 print(
     analyzer.analyze(
         Path("installer.exe")
-    )
+    ).to_dict()
 )
 
 print(
     analyzer.analyze(
         Path("photo.png")
-    )
+    ).to_dict()
 )
