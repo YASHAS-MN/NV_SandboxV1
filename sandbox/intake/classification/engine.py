@@ -146,9 +146,11 @@ class ClassificationEngine:
 
         mapping = {
             "PE": AssetCategory.EXECUTABLE,
+            "Windows PE (.exe)": AssetCategory.EXECUTABLE,
             "PNG": AssetCategory.IMAGE,
             "PDF": AssetCategory.DOCUMENT,
             "ZIP": AssetCategory.ARCHIVE,
+            "ZIP / OOXML / APK / JAR": AssetCategory.ARCHIVE,
         }
 
         return mapping.get(

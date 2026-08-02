@@ -1,0 +1,12 @@
+This is important enough that I want to formally record it.
+
+Decision: Every gateway returns exactly one canonical protocol artifact.
+
+Gateway	Output
+Intake	ClassificationResult
+Static	StaticAnalysisResult
+Dynamic (future)	BehaviorTranscript
+Consensus (future)	VerificationSeal
+Orchestrator	VerificationResult
+
+This means gateways never inspect each other's internals. They communicate only through their protocol artifacts. That gives us loose coupling, clear interfaces, and makes each gateway independently testable.
