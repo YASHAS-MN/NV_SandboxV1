@@ -1,0 +1,36 @@
+Our current analyzers return an Evidence object.
+
+I now think this is slightly wrong.
+
+Instead, analyzers should publish evidence.
+
+Like sensors.
+
+Meaning,
+
+Current:
+
+evidence = analyzer.analyze(asset)
+
+bus.publish(evidence)
+
+Future:
+
+analyzer.analyze(
+    asset,
+    evidence_bus,
+)
+
+Internally,
+
+bus.publish(
+    ExtensionEvidence(...)
+)
+
+Why?
+
+Because analyzers are producers, not functions.
+
+This mirrors our sensor architecture perfectly.
+
+I would not refactor this today. We'll do it after the Classification Engine is stable. For now, keep the API as-is to avoid unnecessary churn.
