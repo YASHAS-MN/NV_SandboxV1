@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from subprocess import CompletedProcess
 
-from sandbox.behavior.behavior_recorder import BehaviorRecorder
+from sandbox.observation.observation_bus import ObservationBus
 from sandbox.core.event_types import EventType
 
 
@@ -21,10 +21,10 @@ class ProcessSensor:
     def collect(
         self,
         completed: CompletedProcess,
-        recorder: BehaviorRecorder,
+        bus: ObservationBus,
     ) -> None:
 
-        recorder.record(
+        bus.publish(
             sensor=self.name,
             event_type=EventType.PROCESS_EXIT,
             payload={

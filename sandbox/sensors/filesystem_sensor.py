@@ -11,7 +11,7 @@ from __future__ import annotations
 import hashlib
 from pathlib import Path
 
-from sandbox.behavior.behavior_recorder import BehaviorRecorder
+from sandbox.observation.observation_bus import ObservationBus
 from sandbox.core.event_types import EventType
 
 
@@ -45,7 +45,7 @@ class FilesystemSensor:
         self,
         before: dict[str, str],
         after: dict[str, str],
-        recorder: BehaviorRecorder,
+        bus: ObservationBus,
     ) -> None:
 
         before_files = set(before)
@@ -58,7 +58,7 @@ class FilesystemSensor:
 
         for file in sorted(created):
 
-            recorder.record(
+            bus.publish(
                 sensor=self.name,
                 event_type=EventType.FILE_CREATE,
                 payload={
@@ -69,7 +69,7 @@ class FilesystemSensor:
 
         for file in sorted(deleted):
 
-            recorder.record(
+            bus.publish(
                 sensor=self.name,
                 event_type=EventType.FILE_DELETE,
                 payload={
@@ -81,7 +81,7 @@ class FilesystemSensor:
 
             if before[file] != after[file]:
 
-                recorder.record(
+                bus.publish(
                     sensor=self.name,
                     event_type=EventType.FILE_MODIFY,
                     payload={

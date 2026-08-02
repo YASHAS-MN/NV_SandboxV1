@@ -18,6 +18,7 @@ from sandbox.behavior.behavior_recorder import BehaviorRecorder
 from sandbox.sensors.filesystem_sensor import FilesystemSensor
 from sandbox.sensors.process_sensor import ProcessSensor
 from sandbox.core.event_types import EventType
+from sandbox.observation.observation_bus import ObservationBus
 
 
 class ExecutionEngine:
@@ -33,6 +34,7 @@ class ExecutionEngine:
     ):
 
         recorder = BehaviorRecorder()
+        bus = ObservationBus(recorder)
 
         with tempfile.TemporaryDirectory() as tmp:
 
@@ -44,7 +46,7 @@ class ExecutionEngine:
 
             before = self.filesystem.snapshot(workspace)
 
-            recorder.record(
+            bus.publish(
                 sensor="engine",
                 event_type=EventType.EXECUTION_START,
                 payload={
@@ -61,7 +63,7 @@ class ExecutionEngine:
 
             self.process.collect(
                 completed,
-                recorder,
+                bus,
             )
 
             after = self.filesystem.snapshot(workspace)
@@ -69,10 +71,10 @@ class ExecutionEngine:
             self.filesystem.collect(
                 before,
                 after,
-                recorder,
+                bus,
             )
 
-            recorder.record(
+            bus.publish(
                 sensor="engine",
                 event_type=EventType.EXECUTION_END,
                 payload={},
