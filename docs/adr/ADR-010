@@ -1,0 +1,8 @@
+# ADR-010: Execution Context Is Part Of Evidence
+
+## Decision
+A BehaviorTranscript without its canonical ObservationContext is incomplete and must not participate in consensus.
+
+By embedding the context (protocol version, runtime profile, observation profile, policy version) inside the transcript itself, we ensure that:
+1. Every observer knows exactly how and under what rules the transcript was produced.
+2. The transcript is self-describing and completely self-contained for cryptographic hashing.

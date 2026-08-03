@@ -1,10 +1,17 @@
-from sandbox.behavior import BehaviorTranscript
+from sandbox.behavior import BehaviorTranscript, ObservationContext
 
 from sandbox.core.events import Event
 
+context = ObservationContext(
+    protocol_version="1.0",
+    runtime_profile="python-runtime-v1",
+    observation_profile="filesystem-process-v1",
+    policy_version="1.0",
+)
+
 transcript = BehaviorTranscript(
 
-    protocol_version="1.0",
+    context=context,
 
     event_count=2,
 

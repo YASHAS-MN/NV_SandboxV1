@@ -9,6 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from sandbox.core.events import Event
+from sandbox.behavior.context import ObservationContext
 
 
 @dataclass(frozen=True, slots=True)
@@ -18,7 +19,7 @@ class BehaviorTranscript:
     dynamic execution.
     """
 
-    protocol_version: str
+    context: ObservationContext
 
     event_count: int
 
@@ -28,7 +29,7 @@ class BehaviorTranscript:
 
         return {
 
-            "protocol_version": self.protocol_version,
+            "context": self.context.to_dict(),
 
             "event_count": self.event_count,
 
