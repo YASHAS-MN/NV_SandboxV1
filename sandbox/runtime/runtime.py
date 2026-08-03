@@ -6,8 +6,10 @@ Execution Runtime
 
 from __future__ import annotations
 
+import time
 from pathlib import Path
 
+from shared.logger import logger
 from sandbox.behavior import (
     ObservationContext,
     TranscriptBuilder,
@@ -55,67 +57,63 @@ class ExecutionRuntime:
         asset: Path,
     ) -> ExecutionSession:
 
+        start = time.perf_counter()
         workspace = self._workspace_manager
 
-        workspace.create()
+        context = ObservationContext(
+            protocol_version="1.0",
+            runtime_profile="python-runtime-v1",
+            observation_profile="default",
+            policy_version="1.0",
+        )
+        builder = TranscriptBuilder(context)
+
+        logger.info(f"Preparing execution context for asset: {asset.name}")
 
         try:
-
-            context = ObservationContext(
-
-                protocol_version="1.0",
-
-                runtime_profile="python-runtime-v1",
-
-                observation_profile="default",
-
-                policy_version="1.0",
-
-            )
-
-            builder = TranscriptBuilder(context)
-
-            #
-            # IMPORTANT
-            #
-            # ObservationBus should receive
-            # the builder here.
-            #
-            # If your current ObservationBus
-            # uses another setter name,
-            # adjust ONLY this line.
-            #
+            logger.info("Creating temporary workspace...")
+            workspace.create()
 
             self._observation_bus.set_builder(builder)
 
             self._sensor_manager.before_execution()
 
+            logger.info("Selecting execution runner...")
             runner = self._runner_manager.select(asset)
 
+            logger.info(f"Starting execution of {asset.name} via runner: {runner.name}")
             result: ExecutionResult = runner.execute(
-
                 asset,
-
                 workspace,
-
             )
+
+            if result.timed_out:
+                logger.warning(f"Execution timed out for asset: {asset.name}")
+
+            logger.info(f"Execution finished. exit_code: {result.exit_code}, duration: {result.duration_ms}ms")
 
             self._sensor_manager.after_execution()
 
             transcript = builder.build()
 
             return ExecutionSession(
-
                 transcript=transcript,
-
                 exit_code=result.exit_code,
-
                 timed_out=result.timed_out,
-
                 duration_ms=result.duration_ms,
+            )
 
+        except Exception as e:
+            logger.error(f"Execution failed due to unhandled exception: {e}", exc_info=True)
+            duration = int((time.perf_counter() - start) * 1000)
+            transcript = builder.build()
+            return ExecutionSession(
+                transcript=transcript,
+                exit_code=-1,
+                timed_out=False,
+                duration_ms=duration,
             )
 
         finally:
-
+            logger.info("Cleaning up temporary workspace...")
             workspace.cleanup()
