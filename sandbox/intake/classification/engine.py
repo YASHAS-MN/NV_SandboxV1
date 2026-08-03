@@ -189,7 +189,9 @@ class ClassificationEngine:
 
         # --- Data / structured text ---
         if extension in (".csv", ".json", ".xml", ".yaml",
-                         ".yml", ".toml", ".ini", ".cfg"):
+                         ".yml", ".toml", ".ini", ".cfg",
+                         ".c", ".cpp", ".cc", ".cxx", ".h", ".hpp",
+                         ".rs", ".go", ".cs", ".java"):
             return AssetCategory.DATA
 
         return AssetCategory.UNKNOWN
@@ -203,9 +205,11 @@ class ClassificationEngine:
             "PE": AssetCategory.EXECUTABLE,
             "Windows PE (.exe)": AssetCategory.EXECUTABLE,
             "PNG": AssetCategory.IMAGE,
+            "JPEG": AssetCategory.IMAGE,
             "PDF": AssetCategory.DOCUMENT,
             "ZIP": AssetCategory.ARCHIVE,
             "ZIP / OOXML / APK / JAR": AssetCategory.ARCHIVE,
+            "MP3": AssetCategory.AUDIO,
         }
 
         return mapping.get(

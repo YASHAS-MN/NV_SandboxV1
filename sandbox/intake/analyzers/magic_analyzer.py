@@ -20,6 +20,8 @@ class MagicAnalyzer:
         "89504e47": "PNG",
         "25504446": "PDF",
         "504b0304": "ZIP / OOXML / APK / JAR",
+        "ffd8ff": "JPEG",
+        "494433": "MP3",
     }
 
     def analyze(
