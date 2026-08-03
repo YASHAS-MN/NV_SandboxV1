@@ -23,7 +23,7 @@ class VerificationResult:
 
     static_analysis: StaticAnalysisResult
 
-    decision: str = "COMPLETE"
+    decision: str | None = None
 
     execution: dict[str, Any] | None = None
 
@@ -36,8 +36,10 @@ class VerificationResult:
         res = {
             "classification": self.classification.to_dict(),
             "static_analysis": self.static_analysis.to_dict(),
-            "decision": self.decision,
         }
+
+        if self.decision is not None:
+            res["decision"] = self.decision
 
         if self.execution is not None:
             res["execution"] = self.execution
