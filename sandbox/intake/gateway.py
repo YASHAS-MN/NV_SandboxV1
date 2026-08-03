@@ -14,7 +14,7 @@ from sandbox.intake.analyzers.extension_analyzer import ExtensionAnalyzer
 from sandbox.intake.analyzers.magic_analyzer import MagicAnalyzer
 from sandbox.intake.classification.engine import ClassificationEngine
 from sandbox.intake.evidence_bus import EvidenceBus
-from sandbox.orchestration import PipelineStage
+from sandbox.orchestration.pipeline import PipelineStage
 
 
 class IntakeGateway(PipelineStage):

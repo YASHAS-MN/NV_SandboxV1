@@ -8,6 +8,11 @@ sample.write_bytes(bytes.fromhex("4D5A"))
 
 gateway = GatewayOrchestrator()
 
+# Pipeline verification
+assert len(gateway.pipeline) == 2
+assert gateway.pipeline[0].name == "intake"
+assert gateway.pipeline[1].name == "static"
+
 result = gateway.verify(sample)
 
 print(result.to_dict())

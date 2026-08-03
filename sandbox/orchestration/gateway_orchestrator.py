@@ -22,19 +22,28 @@ class GatewayOrchestrator:
 
     def __init__(self) -> None:
 
-        self._intake = IntakeGateway()
-        self._static = StaticGateway()
+        self._pipeline = [
+            IntakeGateway(),
+            StaticGateway(),
+        ]
+
+    @property
+    def pipeline(self):
+
+        return tuple(self._pipeline)
 
     def verify(
         self,
         asset: Path,
     ) -> VerificationResult:
 
-        classification = self._intake.process(asset)
+        results = {}
 
-        static_analysis = self._static.process(asset)
+        for stage in self._pipeline:
+
+            results[stage.name] = stage.run(asset)
 
         return VerificationResult(
-            classification=classification,
-            static_analysis=static_analysis,
+            classification=results["intake"],
+            static_analysis=results["static"],
         )

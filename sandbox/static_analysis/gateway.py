@@ -14,7 +14,7 @@ from sandbox.static_analysis.analyzers.hash_analyzer import HashAnalyzer
 from sandbox.static_analysis.analyzers.entropy_analyzer import EntropyAnalyzer
 from sandbox.static_analysis.report.engine import StaticAnalysisEngine
 from sandbox.static_analysis.static_bus import StaticEvidenceBus
-from sandbox.orchestration import PipelineStage
+from sandbox.orchestration.pipeline import PipelineStage
 
 
 class StaticGateway(PipelineStage):
