@@ -8,7 +8,7 @@ sample.write_bytes(bytes.fromhex("4D5A"))
 
 gateway = IntakeGateway()
 
-result = gateway.process(sample)
+result = gateway.run(sample)
 
 print(result.to_dict())
 

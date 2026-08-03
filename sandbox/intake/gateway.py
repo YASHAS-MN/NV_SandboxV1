@@ -14,9 +14,10 @@ from sandbox.intake.analyzers.extension_analyzer import ExtensionAnalyzer
 from sandbox.intake.analyzers.magic_analyzer import MagicAnalyzer
 from sandbox.intake.classification.engine import ClassificationEngine
 from sandbox.intake.evidence_bus import EvidenceBus
+from sandbox.orchestration import PipelineStage
 
 
-class IntakeGateway:
+class IntakeGateway(PipelineStage):
 
     def __init__(self) -> None:
 
@@ -27,7 +28,11 @@ class IntakeGateway:
 
         self._engine = ClassificationEngine()
 
-    def process(
+    @property
+    def name(self) -> str:
+        return "intake"
+
+    def run(
         self,
         asset: Path,
     ):
