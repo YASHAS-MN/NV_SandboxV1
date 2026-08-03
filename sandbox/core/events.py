@@ -19,14 +19,22 @@ from typing import Any
 class Event:
     """
     Canonical protocol event.
-
-    Consensus-critical information only.
     """
 
     sequence: int
     sensor: str
     event_type: str
+    relative_time_ms: int
     payload: dict[str, Any]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "sequence": self.sequence,
+            "sensor": self.sensor,
+            "event_type": self.event_type,
+            "relative_time_ms": self.relative_time_ms,
+            "payload": self.payload,
+        }
 
     def canonical_dict(self) -> dict[str, Any]:
         return {

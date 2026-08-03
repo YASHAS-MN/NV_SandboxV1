@@ -1,0 +1,10 @@
+# ADR-009: Behavior is Evidence
+
+## Decision
+The Execution Runtime records observations only.
+Any interpretation of those observations is delegated to later protocol stages.
+
+This continues the principle we've followed since Sprint 1:
+- Sensors observe.
+- Engines interpret.
+- Consensus verifies.
