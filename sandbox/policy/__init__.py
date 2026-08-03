@@ -3,7 +3,12 @@ from .decision import (
     ExecutionDecision,
 )
 
+from .engine import (
+    ExecutionPolicyEngine,
+)
+
 __all__ = [
     "ExecutionAction",
     "ExecutionDecision",
+    "ExecutionPolicyEngine",
 ]
