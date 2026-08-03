@@ -15,3 +15,10 @@ The transcript contains observations only.
 It never classifies behavior as benign or malicious.
 
 Those interpretations belong to higher protocol layers.
+
+## Structure
+
+A `BehaviorTranscript` comprises:
+1. **ObservationContext**: Execution environment metadata (protocol version, runtime profile, observation profile, policy version).
+2. **Event Count**: The total number of events recorded.
+3. **Events**: An ordered list of observations (`Event` objects).
