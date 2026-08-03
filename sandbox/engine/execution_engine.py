@@ -24,9 +24,7 @@ from sandbox.observation.observation_bus import ObservationBus
 class ExecutionEngine:
 
     def __init__(self):
-
-        self.filesystem = FilesystemSensor()
-        self.process = ProcessSensor()
+        pass
 
     def execute(
         self,
@@ -36,6 +34,9 @@ class ExecutionEngine:
         recorder = BehaviorRecorder()
         bus = ObservationBus(recorder)
 
+        filesystem = FilesystemSensor(bus)
+        process = ProcessSensor(bus)
+
         with tempfile.TemporaryDirectory() as tmp:
 
             workspace = Path(tmp)
@@ -44,7 +45,10 @@ class ExecutionEngine:
 
             shutil.copy2(asset, target)
 
-            before = self.filesystem.snapshot(workspace)
+            filesystem.before_execution()
+            process.before_execution()
+
+            before = filesystem.snapshot(workspace)
 
             bus.publish(
                 sensor="engine",
@@ -61,18 +65,14 @@ class ExecutionEngine:
                 text=True,
             )
 
-            self.process.collect(
-                completed,
-                bus,
-            )
+            process.observe(completed)
 
-            after = self.filesystem.snapshot(workspace)
+            after = filesystem.snapshot(workspace)
 
-            self.filesystem.collect(
-                before,
-                after,
-                bus,
-            )
+            filesystem.observe(before, after)
+
+            process.after_execution()
+            filesystem.after_execution()
 
             bus.publish(
                 sensor="engine",
