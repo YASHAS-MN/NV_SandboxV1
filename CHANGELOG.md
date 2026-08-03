@@ -1,5 +1,32 @@
 # Nebula Changelog
 
+# Nebula v1.1.0
+
+## New Features
+
+- **Network Sensor**: `NetworkSensor` intercepts `socket.connect()` calls via
+  workspace-injected `sitecustomize.py` shim. Produces `NETWORK_CONNECT` events
+  in the behavior transcript. No OS privileges required.
+- **JavaScript Runner**: Executes `.js`, `.ts`, `.mjs` files via Node.js.
+- **Shell Runner**: Executes `.sh`, `.bash`, `.ps1`, `.bat` via platform interpreter.
+- **Java Runner**: Executes `.jar`, `.class`, `.war` files via JVM.
+- **Archive Runner**: Recursively unpacks `.zip`, `.tar`, `.gz`, `.tgz` and
+  applies full NebulaVerifier to each extracted asset.
+- **Expanded Classification**: 22 new extension mappings across SCRIPT, IMAGE,
+  DOCUMENT, AUDIO, VIDEO, ARCHIVE, and DATA categories.
+- **Expanded Policy Routing**: AUDIO/VIDEO/DATA → static-only; ARCHIVE → runtime.
+
+## Supported Assets (v1.1.0)
+
+- Python `.py`
+- JavaScript `.js` / `.ts` / `.mjs` (requires Node in PATH)
+- Shell `.sh` / `.bash` / `.ps1` / `.bat`
+- JVM `.jar` / `.class` (requires Java in PATH)
+- Archives `.zip` / `.tar` / `.gz` / `.tgz` (recursive scan)
+- Static: IMAGE, DOCUMENT, AUDIO, VIDEO, DATA (classification + static analysis only)
+
+---
+
 # Nebula v1.0.0
 
 ## Features

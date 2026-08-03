@@ -62,7 +62,7 @@ class ExecutionRuntime:
 
         context = ObservationContext(
             protocol_version="1.0",
-            runtime_profile="python-runtime-v1",
+            runtime_profile="nebula-runtime-v2",
             observation_profile="default",
             policy_version="1.0",
         )
@@ -75,6 +75,9 @@ class ExecutionRuntime:
             workspace.create()
 
             self._observation_bus.set_builder(builder)
+
+            # Broadcast workspace path to all sensors (e.g. NetworkSensor)
+            self._sensor_manager.attach_workspace(workspace.path)
 
             self._sensor_manager.before_execution()
 

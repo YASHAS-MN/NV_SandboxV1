@@ -20,12 +20,17 @@ from sandbox.runtime import (
     WorkspaceManager,
     RunnerManager,
     PythonRunner,
+    JavaScriptRunner,
+    ShellRunner,
+    JavaRunner,
+    ArchiveRunner,
 )
 from sandbox.runtime.process_executor import ProcessExecutor
 from sandbox.observation.observation_bus import ObservationBus
 from sandbox.sensors.manager import SensorManager
 from sandbox.sensors.process_sensor import ProcessSensor
 from sandbox.sensors.filesystem_sensor import FilesystemSensor
+from sandbox.sensors.network_sensor import NetworkSensor
 from sandbox.behavior.hasher import TranscriptHasher
 from sandbox.behavior.execution_metadata import ExecutionMetadata
 from sandbox.orchestration.verification_result import VerificationResult
@@ -41,13 +46,17 @@ class NebulaVerifier:
 
         self._bus = ObservationBus()
         self._sensor_manager = SensorManager()
+        self._sensor_manager.register(NetworkSensor(self._bus))
         self._sensor_manager.register(ProcessSensor(self._bus))
         self._sensor_manager.register(FilesystemSensor(self._bus))
 
+        executor = ProcessExecutor()
         self._runner_manager = RunnerManager()
-        self._runner_manager.register(
-            PythonRunner(ProcessExecutor(), timeout=timeout)
-        )
+        self._runner_manager.register(PythonRunner(executor, timeout=timeout))
+        self._runner_manager.register(JavaScriptRunner(executor, timeout=timeout))
+        self._runner_manager.register(ShellRunner(executor, timeout=timeout))
+        self._runner_manager.register(JavaRunner(executor, timeout=timeout))
+        self._runner_manager.register(ArchiveRunner(timeout=timeout))
 
         self._runtime = ExecutionRuntime(
             runner_manager=self._runner_manager,

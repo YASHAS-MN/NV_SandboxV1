@@ -57,6 +57,14 @@ class SensorManager:
 
         return tuple(self._sensors)
 
+    def attach_workspace(self, workspace_path) -> None:
+        """
+        Broadcast the active workspace path to all sensors.
+        Called by the runtime after workspace creation.
+        """
+        for sensor in self._sensors:
+            sensor.attach(workspace_path)
+
     def before_execution(self) -> None:
 
         for sensor in self._sensors:

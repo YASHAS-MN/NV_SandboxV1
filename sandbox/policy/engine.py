@@ -28,11 +28,14 @@ class ExecutionPolicyEngine:
 
         category = classification.category
 
-        # ---------- Static assets ----------
+        # ---------- Static assets (no execution needed) ----------
 
         if category in (
             AssetCategory.IMAGE,
             AssetCategory.DOCUMENT,
+            AssetCategory.AUDIO,
+            AssetCategory.VIDEO,
+            AssetCategory.DATA,
         ):
 
             return ExecutionDecision(
@@ -41,7 +44,7 @@ class ExecutionPolicyEngine:
                 reason="Static asset does not require dynamic execution.",
             )
 
-        # ---------- Executables ----------
+        # ---------- Executables & Scripts ----------
 
         if category in (
             AssetCategory.EXECUTABLE,
@@ -59,12 +62,9 @@ class ExecutionPolicyEngine:
         if category == AssetCategory.ARCHIVE:
 
             return ExecutionDecision(
-                action=ExecutionAction.MANUAL_REVIEW,
-                next_gateway=None,
-                reason="Archive inspection not yet implemented.",
-                warnings=[
-                    "Container analysis pending.",
-                ],
+                action=ExecutionAction.CONTINUE,
+                next_gateway="dynamic",
+                reason="Archive requires recursive content inspection.",
             )
 
         # ---------- Unknown ----------

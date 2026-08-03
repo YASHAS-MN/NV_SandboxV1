@@ -23,6 +23,14 @@ class Sensor(ABC):
     def priority(self) -> int:
         return 100
 
+    def attach(self, workspace_path) -> None:
+        """
+        Invoked by the runtime to bind the sensor to the active
+        workspace directory. Override in sensors that need
+        workspace access (e.g. NetworkSensor).
+        """
+        return None
+
     def before_execution(self) -> None:
         """
         Invoked immediately before execution starts.

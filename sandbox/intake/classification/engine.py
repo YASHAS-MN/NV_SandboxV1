@@ -132,17 +132,65 @@ class ClassificationEngine:
 
         extension = extension.lower()
 
-        if extension == ".exe":
+        # --- Executables ---
+        if extension in (".exe", ".dll", ".so", ".dylib"):
             return AssetCategory.EXECUTABLE
 
-        if extension == ".py":
+        # --- Scripts (interpreted languages) ---
+        if extension in (
+            ".py", ".pyw",                        # Python
+            ".js", ".ts", ".mjs", ".cjs",         # JavaScript / TypeScript
+            ".rb",                                  # Ruby
+            ".pl", ".pm",                          # Perl
+            ".php",                                 # PHP
+            ".lua",                                 # Lua
+        ):
             return AssetCategory.SCRIPT
 
-        if extension == ".png":
+        # --- Shell scripts ---
+        if extension in (".sh", ".bash", ".zsh", ".fish",  # Unix shells
+                         ".ps1", ".psm1", ".psd1",          # PowerShell
+                         ".bat", ".cmd"):
+            return AssetCategory.SCRIPT
+
+        # --- JVM bytecode ---
+        if extension in (".jar", ".class", ".war", ".ear"):
+            return AssetCategory.SCRIPT
+
+        # --- Python bytecode ---
+        if extension == ".pyc":
+            return AssetCategory.SCRIPT
+
+        # --- Images ---
+        if extension in (".png", ".jpg", ".jpeg", ".gif",
+                         ".bmp", ".webp", ".svg", ".ico",
+                         ".tiff", ".tif"):
             return AssetCategory.IMAGE
 
-        if extension == ".pdf":
+        # --- Documents ---
+        if extension in (".pdf", ".doc", ".docx", ".odt",
+                         ".txt", ".md", ".rst", ".rtf"):
             return AssetCategory.DOCUMENT
+
+        # --- Audio ---
+        if extension in (".mp3", ".wav", ".flac", ".ogg",
+                         ".aac", ".m4a", ".wma", ".opus"):
+            return AssetCategory.AUDIO
+
+        # --- Video ---
+        if extension in (".mp4", ".mkv", ".avi", ".mov",
+                         ".webm", ".flv", ".wmv", ".m4v"):
+            return AssetCategory.VIDEO
+
+        # --- Archives ---
+        if extension in (".zip", ".tar", ".gz", ".tgz",
+                         ".bz2", ".xz", ".7z", ".rar"):
+            return AssetCategory.ARCHIVE
+
+        # --- Data / structured text ---
+        if extension in (".csv", ".json", ".xml", ".yaml",
+                         ".yml", ".toml", ".ini", ".cfg"):
+            return AssetCategory.DATA
 
         return AssetCategory.UNKNOWN
 
