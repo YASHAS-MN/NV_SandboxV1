@@ -8,7 +8,7 @@ sample.write_bytes(b"Nebula Labs")
 
 gateway = StaticGateway()
 
-result = gateway.process(sample)
+result = gateway.run(sample)
 
 print(result.to_dict())
 
