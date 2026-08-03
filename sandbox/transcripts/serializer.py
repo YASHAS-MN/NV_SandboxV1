@@ -12,7 +12,7 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from sandbox.transcripts.transcript import BehaviorTranscript
+from sandbox.behavior.transcript import BehaviorTranscript
 
 
 class TranscriptSerializer:

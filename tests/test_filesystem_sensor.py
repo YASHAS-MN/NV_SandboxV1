@@ -1,12 +1,20 @@
 from pathlib import Path
 import tempfile
 
-from sandbox.behavior.behavior_recorder import BehaviorRecorder
+from sandbox.behavior import ObservationContext, TranscriptBuilder
 from sandbox.observation.observation_bus import ObservationBus
 from sandbox.sensors.filesystem_sensor import FilesystemSensor
 
-recorder = BehaviorRecorder()
-bus = ObservationBus(recorder)
+context = ObservationContext(
+    protocol_version="1.0",
+    runtime_profile="python-runtime-v1",
+    observation_profile="default",
+    policy_version="1.0",
+)
+builder = TranscriptBuilder(context)
+
+bus = ObservationBus()
+bus.set_builder(builder)
 sensor = FilesystemSensor(bus)
 
 with tempfile.TemporaryDirectory() as tmp:
@@ -23,7 +31,8 @@ with tempfile.TemporaryDirectory() as tmp:
     sensor.observe(before, after)
     sensor.after_execution()
 
-print(recorder.export().to_dict())
+transcript = builder.build()
+print(transcript.to_dict())
 
 assert sensor.name == "filesystem"
-assert recorder.event_count == 1
+assert transcript.event_count == 1

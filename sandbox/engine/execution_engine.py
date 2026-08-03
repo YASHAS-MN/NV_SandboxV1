@@ -14,7 +14,7 @@ import tempfile
 import shutil
 from pathlib import Path
 
-from sandbox.behavior.behavior_recorder import BehaviorRecorder
+from sandbox.behavior import ObservationContext, TranscriptBuilder
 from sandbox.sensors.filesystem_sensor import FilesystemSensor
 from sandbox.sensors.process_sensor import ProcessSensor
 from sandbox.core.event_types import EventType
@@ -31,8 +31,15 @@ class ExecutionEngine:
         asset: Path,
     ):
 
-        recorder = BehaviorRecorder()
-        bus = ObservationBus(recorder)
+        context = ObservationContext(
+            protocol_version="1.0",
+            runtime_profile="python-runtime-v1",
+            observation_profile="default",
+            policy_version="1.0",
+        )
+        builder = TranscriptBuilder(context)
+        bus = ObservationBus()
+        bus.set_builder(builder)
 
         filesystem = FilesystemSensor(bus)
         process = ProcessSensor(bus)
@@ -80,4 +87,4 @@ class ExecutionEngine:
                 payload={},
             )
 
-            return recorder.export()
+            return builder.build()

@@ -25,6 +25,12 @@ class BehaviorTranscript:
 
     events: list[Event] = field(default_factory=list)
 
+    def canonical_dict(self):
+        return [
+            event.canonical_dict()
+            for event in self.events
+        ]
+
     def to_dict(self):
 
         return {

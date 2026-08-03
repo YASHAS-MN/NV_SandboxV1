@@ -1,10 +1,17 @@
-from sandbox.behavior.behavior_recorder import BehaviorRecorder
 from sandbox.observation.observation_bus import ObservationBus
 from sandbox.core.event_types import EventType
+from sandbox.behavior import ObservationContext, TranscriptBuilder
 
-recorder = BehaviorRecorder()
+context = ObservationContext(
+    protocol_version="1.0",
+    runtime_profile="python-runtime-v1",
+    observation_profile="default",
+    policy_version="1.0",
+)
+builder = TranscriptBuilder(context)
 
-bus = ObservationBus(recorder)
+bus = ObservationBus()
+bus.set_builder(builder)
 
 bus.publish(
     sensor="filesystem",
@@ -14,6 +21,9 @@ bus.publish(
     },
 )
 
-transcript = recorder.export()
-
+transcript = builder.build()
 print(transcript.to_dict())
+
+assert transcript.event_count == 1
+assert transcript.events[0].sensor == "filesystem"
+assert transcript.events[0].payload == {"path": "demo.txt"}

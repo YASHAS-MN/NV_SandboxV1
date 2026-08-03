@@ -5,6 +5,7 @@ from .runner_manager import RunnerManager
 from .process_executor import ProcessExecutor
 from .python_runner import PythonRunner
 from .result import ExecutionResult
+from .runtime import ExecutionRuntime
 
 __all__ = [
     "ExecutionSession",
@@ -14,4 +15,5 @@ __all__ = [
     "ProcessExecutor",
     "PythonRunner",
     "ExecutionResult",
+    "ExecutionRuntime",
 ]

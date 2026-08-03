@@ -1,11 +1,19 @@
 from subprocess import CompletedProcess
 
-from sandbox.behavior.behavior_recorder import BehaviorRecorder
+from sandbox.behavior import ObservationContext, TranscriptBuilder
 from sandbox.observation.observation_bus import ObservationBus
 from sandbox.sensors.process_sensor import ProcessSensor
 
-recorder = BehaviorRecorder()
-bus = ObservationBus(recorder)
+context = ObservationContext(
+    protocol_version="1.0",
+    runtime_profile="python-runtime-v1",
+    observation_profile="default",
+    policy_version="1.0",
+)
+builder = TranscriptBuilder(context)
+
+bus = ObservationBus()
+bus.set_builder(builder)
 sensor = ProcessSensor(bus)
 
 completed = CompletedProcess(
@@ -19,9 +27,8 @@ sensor.before_execution()
 sensor.observe(completed)
 sensor.after_execution()
 
-print(
-    recorder.export().to_dict()
-)
+transcript = builder.build()
+print(transcript.to_dict())
 
 assert sensor.name == "process"
-assert recorder.event_count == 1
+assert transcript.event_count == 1
