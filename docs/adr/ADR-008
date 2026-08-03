@@ -1,0 +1,26 @@
+Important Architectural Change (ADR-008)
+
+I want to freeze another rule.
+
+ExecutionPolicyEngine shall consume only protocol artifacts.
+
+It must never receive:
+
+Path
+bytes
+Evidence
+Analyzer
+
+Only:
+
+ClassificationResult
+
+↓
+
+StaticAnalysisResult
+
+↓
+
+ExecutionDecision
+
+If we preserve this rule, then years later we could replace the entire Intake Gateway or Static Gateway with different implementations, and the policy engine wouldn't require a single line of change.
