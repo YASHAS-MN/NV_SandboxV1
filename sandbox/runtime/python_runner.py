@@ -11,14 +11,8 @@ import sys
 import time
 from pathlib import Path
 
-from sandbox.behavior import (
-    ObservationContext,
-    TranscriptBuilder,
-)
-from sandbox.runtime import (
-    ExecutionSession,
-    Runner,
-)
+from sandbox.runtime.runner import Runner
+from sandbox.runtime.result import ExecutionResult
 from sandbox.runtime.process_executor import ProcessExecutor
 from sandbox.runtime.workspace import WorkspaceManager
 
@@ -47,7 +41,7 @@ class PythonRunner(Runner):
         self,
         asset: Path,
         workspace: WorkspaceManager,
-    ) -> ExecutionSession:
+    ) -> ExecutionResult:
 
         runtime_asset = workspace.path / asset.name
 
@@ -70,25 +64,7 @@ class PythonRunner(Runner):
             (time.perf_counter() - start) * 1000
         )
 
-        context = ObservationContext(
-
-            protocol_version="1.0",
-
-            runtime_profile="python-runtime-v1",
-
-            observation_profile="default",
-
-            policy_version="1.0",
-
-        )
-
-        builder = TranscriptBuilder(context)
-
-        transcript = builder.build()
-
-        return ExecutionSession(
-
-            transcript=transcript,
+        return ExecutionResult(
 
             exit_code=result.returncode,
 

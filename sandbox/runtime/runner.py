@@ -9,7 +9,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from sandbox.runtime import ExecutionSession
+from sandbox.runtime.result import ExecutionResult
 from sandbox.runtime.workspace import WorkspaceManager
 
 
@@ -39,5 +39,5 @@ class Runner(ABC):
         self,
         asset: Path,
         workspace: WorkspaceManager,
-    ) -> ExecutionSession:
+    ) -> ExecutionResult:
         ...

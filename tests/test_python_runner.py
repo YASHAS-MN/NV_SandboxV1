@@ -18,7 +18,7 @@ runner = PythonRunner(
 
 )
 
-session = runner.execute(
+result = runner.execute(
 
     Path("sandbox/samples/hello.py"),
 
@@ -26,14 +26,12 @@ session = runner.execute(
 
 )
 
-assert session.exit_code == 0
+assert result.exit_code == 0
 
-assert session.timed_out is False
+assert result.timed_out is False
 
-assert session.duration_ms >= 0
-
-assert session.transcript.event_count == 0
+assert result.duration_ms >= 0
 
 workspace.cleanup()
 
-print(session.to_dict())
+print(result.to_dict())
