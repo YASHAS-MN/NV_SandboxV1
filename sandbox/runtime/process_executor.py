@@ -24,6 +24,7 @@ class ProcessExecutor:
         command: list[str],
         cwd: Path,
         timeout: float | None = None,
+        env: dict[str, str] | None = None,
     ) -> subprocess.CompletedProcess:
 
         return subprocess.run(
@@ -32,4 +33,5 @@ class ProcessExecutor:
             capture_output=True,
             text=False,
             timeout=timeout,
+            env=env,
         )

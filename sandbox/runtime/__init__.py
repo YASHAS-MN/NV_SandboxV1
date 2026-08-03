@@ -6,6 +6,7 @@ from .process_executor import ProcessExecutor
 from .python_runner import PythonRunner
 from .result import ExecutionResult
 from .runtime import ExecutionRuntime
+from .manifest import WorkspaceManifest
 
 __all__ = [
     "ExecutionSession",
@@ -16,4 +17,5 @@ __all__ = [
     "PythonRunner",
     "ExecutionResult",
     "ExecutionRuntime",
+    "WorkspaceManifest",
 ]

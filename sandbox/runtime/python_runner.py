@@ -6,6 +6,7 @@ Python Runner
 
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 import sys
@@ -50,7 +51,18 @@ class PythonRunner(Runner):
 
         shutil.copy2(asset, runtime_asset)
 
+        # Make runtime copy read-only
+        runtime_asset.chmod(0o444)
+
         start = time.perf_counter()
+
+        safe_env = {
+            "PYTHONIOENCODING": "utf-8",
+            "PYTHONUNBUFFERED": "1",
+        }
+
+        if "SystemRoot" in os.environ:
+            safe_env["SystemRoot"] = os.environ["SystemRoot"]
 
         try:
             result = self._executor.execute(
@@ -62,6 +74,7 @@ class PythonRunner(Runner):
 
                 cwd=workspace.path,
                 timeout=self._timeout,
+                env=safe_env,
 
             )
             exit_code = result.returncode
