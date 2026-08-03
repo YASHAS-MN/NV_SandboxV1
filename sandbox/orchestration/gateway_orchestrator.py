@@ -10,9 +10,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from sandbox.intake import IntakeGateway
-from sandbox.static_analysis import StaticGateway
-
 from sandbox.orchestration.verification_result import (
     VerificationResult,
 )
@@ -21,6 +18,8 @@ from sandbox.orchestration.verification_result import (
 class GatewayOrchestrator:
 
     def __init__(self) -> None:
+        from sandbox.intake.gateway import IntakeGateway
+        from sandbox.static_analysis.gateway import StaticGateway
 
         self._pipeline = [
             IntakeGateway(),
