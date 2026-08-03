@@ -27,3 +27,17 @@ decision = engine.evaluate(
 print(decision.to_dict())
 
 assert decision.action.value == "CONTINUE"
+
+medium_static = StaticAnalysisResult(
+    risk_level="MEDIUM",
+    confidence=0.75,
+)
+
+manual_review = engine.evaluate(
+    classification,
+    medium_static,
+)
+
+print(manual_review.to_dict())
+
+assert manual_review.action.value == "MANUAL_REVIEW"

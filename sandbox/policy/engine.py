@@ -20,6 +20,22 @@ from sandbox.static_analysis.report import StaticAnalysisResult
 
 class ExecutionPolicyEngine:
 
+    _EXECUTION_CATEGORIES = (
+        AssetCategory.EXECUTABLE,
+        AssetCategory.SCRIPT,
+        AssetCategory.ARCHIVE,
+    )
+
+    _STATIC_ONLY_CATEGORIES = (
+        AssetCategory.IMAGE,
+        AssetCategory.DOCUMENT,
+        AssetCategory.AUDIO,
+        AssetCategory.VIDEO,
+        AssetCategory.DATA,
+    )
+
+    _LOW_RISK = "LOW"
+
     def evaluate(
         self,
         classification: ClassificationResult,
@@ -27,16 +43,26 @@ class ExecutionPolicyEngine:
     ) -> ExecutionDecision:
 
         category = classification.category
+        risk = static.risk_level.upper()
+
+        if category == AssetCategory.UNKNOWN:
+            return ExecutionDecision(
+                action=ExecutionAction.REJECT,
+                next_gateway=None,
+                reason="Unable to determine asset category.",
+            )
+
+        if risk != self._LOW_RISK:
+            return ExecutionDecision(
+                action=ExecutionAction.MANUAL_REVIEW,
+                next_gateway=None,
+                reason="Static analysis indicates elevated risk.",
+                warnings=[f"Static analysis risk is {static.risk_level}."] ,
+            )
 
         # ---------- Static assets (no execution needed) ----------
 
-        if category in (
-            AssetCategory.IMAGE,
-            AssetCategory.DOCUMENT,
-            AssetCategory.AUDIO,
-            AssetCategory.VIDEO,
-            AssetCategory.DATA,
-        ):
+        if category in self._STATIC_ONLY_CATEGORIES:
 
             return ExecutionDecision(
                 action=ExecutionAction.COMPLETE,
@@ -46,28 +72,13 @@ class ExecutionPolicyEngine:
 
         # ---------- Executables & Scripts ----------
 
-        if category in (
-            AssetCategory.EXECUTABLE,
-            AssetCategory.SCRIPT,
-        ):
+        if category in self._EXECUTION_CATEGORIES:
 
             return ExecutionDecision(
                 action=ExecutionAction.CONTINUE,
                 next_gateway="dynamic",
                 reason="Executable asset requires sandbox execution.",
             )
-
-        # ---------- Archives ----------
-
-        if category == AssetCategory.ARCHIVE:
-
-            return ExecutionDecision(
-                action=ExecutionAction.CONTINUE,
-                next_gateway="dynamic",
-                reason="Archive requires recursive content inspection.",
-            )
-
-        # ---------- Unknown ----------
 
         return ExecutionDecision(
             action=ExecutionAction.REJECT,

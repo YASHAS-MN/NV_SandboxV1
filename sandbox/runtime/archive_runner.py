@@ -65,6 +65,7 @@ class ArchiveRunner(Runner):
         from sandbox.orchestration.verifier import NebulaVerifier
 
         worst_exit = 0
+        any_timed_out = False
         for inner_file in sorted(extract_dir.rglob("*")):
             if not inner_file.is_file():
                 continue
@@ -72,16 +73,20 @@ class ArchiveRunner(Runner):
                 verifier = NebulaVerifier(timeout=self._timeout)
                 inner_result = verifier.verify(inner_file)
                 inner_exec = inner_result.execution
-                if inner_exec and inner_exec.get("exit_code", 0) != 0:
-                    worst_exit = max(worst_exit, 1)
+                if inner_exec:
+                    if inner_exec.get("timed_out", False):
+                        any_timed_out = True
+                        worst_exit = -1
+                    elif inner_exec.get("exit_code", 0) != 0 and worst_exit == 0:
+                        worst_exit = 1
             except Exception:
-                worst_exit = max(worst_exit, 1)
+                worst_exit = -1
 
         duration = int((time.perf_counter() - start) * 1000)
 
         return ExecutionResult(
             exit_code=worst_exit,
-            timed_out=False,
+            timed_out=any_timed_out,
             duration_ms=duration,
         )
 
