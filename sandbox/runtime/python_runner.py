@@ -7,6 +7,7 @@ Python Runner
 from __future__ import annotations
 
 import shutil
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -22,9 +23,11 @@ class PythonRunner(Runner):
     def __init__(
         self,
         executor: ProcessExecutor,
+        timeout: float = 30.0,
     ) -> None:
 
         self._executor = executor
+        self._timeout = timeout
 
     @property
     def name(self) -> str:
@@ -49,16 +52,23 @@ class PythonRunner(Runner):
 
         start = time.perf_counter()
 
-        result = self._executor.execute(
+        try:
+            result = self._executor.execute(
 
-            command=[
-                sys.executable,
-                runtime_asset.name,
-            ],
+                command=[
+                    sys.executable,
+                    runtime_asset.name,
+                ],
 
-            cwd=workspace.path,
+                cwd=workspace.path,
+                timeout=self._timeout,
 
-        )
+            )
+            exit_code = result.returncode
+            timed_out = False
+        except subprocess.TimeoutExpired:
+            exit_code = -1
+            timed_out = True
 
         duration = int(
             (time.perf_counter() - start) * 1000
@@ -66,9 +76,9 @@ class PythonRunner(Runner):
 
         return ExecutionResult(
 
-            exit_code=result.returncode,
+            exit_code=exit_code,
 
-            timed_out=False,
+            timed_out=timed_out,
 
             duration_ms=duration,
 
