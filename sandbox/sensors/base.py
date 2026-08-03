@@ -1,32 +1,36 @@
 """
 Nebula Labs
 
-Abstract Sensor Interface
+Sensor Protocol
 """
 
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from sandbox.behavior.behavior_recorder import BehaviorRecorder
-
 
 class Sensor(ABC):
     """
-    Every sensor observes one aspect
-    of program behaviour.
-
-    Sensors NEVER modify transcripts directly.
+    Base class for every behavior sensor.
     """
 
-    name: str
-
+    @property
     @abstractmethod
-    def collect(
-        self,
-        recorder: BehaviorRecorder,
-    ) -> None:
+    def name(self) -> str:
+        ...
+
+    @property
+    def priority(self) -> int:
+        return 100
+
+    def before_execution(self) -> None:
         """
-        Observe behaviour and emit events.
+        Invoked immediately before execution starts.
         """
-        raise NotImplementedError
+        return None
+
+    def after_execution(self) -> None:
+        """
+        Invoked immediately after execution finishes.
+        """
+        return None

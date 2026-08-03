@@ -1,4 +1,5 @@
-from sandbox.sensors.base import Sensor
-from sandbox.sensors.registry import SensorRegistry
+from .base import Sensor
 
-__all__ = ["Sensor", "SensorRegistry"]
+__all__ = [
+    "Sensor",
+]
