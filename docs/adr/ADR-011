@@ -1,0 +1,6 @@
+# ADR-011: Transcript Construction Is Deterministic
+
+## Decision
+The `TranscriptBuilder` is the only component permitted to construct a `BehaviorTranscript`. Sensors, runtimes, and observation buses may emit or transport events, but they must never directly instantiate transcripts.
+
+This gives us a single construction path, which makes future changes—such as adding transcript signatures, metadata, or canonical validation—far easier to manage.
