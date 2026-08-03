@@ -49,6 +49,7 @@ class BehaviorRecorder:
             sequence=self._sequence,
             sensor=sensor,
             event_type=event_type,
+            relative_time_ms=elapsed,
             payload=payload,
         )
 
