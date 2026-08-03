@@ -98,6 +98,13 @@ class ClassificationEngine:
             magic.matched_format
         )
 
+        if magic.matched_format is None:
+            return ClassificationResult(
+                category=ext_category,
+                confidence=0.70,
+                evidence_used=evidence,
+            )
+
         if ext_category == magic_category:
 
             return ClassificationResult(

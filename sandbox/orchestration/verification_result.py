@@ -10,6 +10,7 @@ Gateway Orchestrator.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
 from sandbox.intake.classification import ClassificationResult
 from sandbox.static_analysis.report import StaticAnalysisResult
@@ -22,14 +23,27 @@ class VerificationResult:
 
     static_analysis: StaticAnalysisResult
 
+    decision: str = "COMPLETE"
+
+    execution: dict[str, Any] | None = None
+
+    transcript: dict[str, Any] | None = None
+
+    hash: str | None = None
+
     def to_dict(self):
 
-        return {
-
-            "classification":
-                self.classification.to_dict(),
-
-            "static_analysis":
-                self.static_analysis.to_dict(),
-
+        res = {
+            "classification": self.classification.to_dict(),
+            "static_analysis": self.static_analysis.to_dict(),
+            "decision": self.decision,
         }
+
+        if self.execution is not None:
+            res["execution"] = self.execution
+        if self.transcript is not None:
+            res["transcript"] = self.transcript
+        if self.hash is not None:
+            res["hash"] = self.hash
+
+        return res
