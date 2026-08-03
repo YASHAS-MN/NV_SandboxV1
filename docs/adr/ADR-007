@@ -1,0 +1,14 @@
+ADR-007 — Policy as a First-Class Subsystem
+
+This is an important architectural decision.
+
+Decision:
+
+Execution policy shall exist as an independent subsystem and must not be embedded inside the GatewayOrchestrator.
+
+Rationale
+The orchestrator coordinates.
+The policy decides.
+Gateways analyze.
+
+Each has a single responsibility.
